@@ -1,0 +1,44 @@
+[training@localhost ~]$ hadoop fs -ls /hbase/mytable/*/cf
+Found 1 items
+-rw-r--r--   1 hbase supergroup        646 2023-02-28 12:03 /hbase/mytable/d5f60e47f84043709fbe71edafb9a060/cf/4c56da3227bc4aa4a77107483f81f394
+[training@localhost ~]$ hbase org.apache.hadoop.hbase.io.hfile.HFile \
+> --printkv --file hdfs://localhost:8020/hbase/mytable/d5f60e47f84043709fbe71edafb9a060/cf/4c56da3227bc4aa4a77107483f81f394
+23/02/28 12:14:29 WARN conf.Configuration: hadoop.native.lib is deprecated. Instead, use io.native.lib.available
+23/02/28 12:14:29 WARN conf.Configuration: fs.default.name is deprecated. Instead, use fs.defaultFS
+23/02/28 12:14:30 INFO hfile.CacheConfig: Allocating LruBlockCache with maximum size 124.2m
+K: row1/cf:col/1677603550111/Put/vlen=3 V: foo
+K: row2/cf:col/1677603662633/Put/vlen=3 V: bar
+Scanned kv count -> 2
+[training@localhost ~]$ hadoop fs -ls /hbase/mytable/*/cf
+Found 2 items
+-rw-r--r--   1 hbase supergroup        614 2023-02-28 12:07 /hbase/mytable/d5f60e47f84043709fbe71edafb9a060/cf/1ebc6222378f473a88ab9791ffdaf3e1
+-rw-r--r--   1 hbase supergroup        646 2023-02-28 12:03 /hbase/mytable/d5f60e47f84043709fbe71edafb9a060/cf/4c56da3227bc4aa4a77107483f81f394
+[training@localhost ~]$ hbase org.apache.hadoop.hbase.io.hfile.HFile --printkv --file hdfs://localhost:8020/hbase/mytable/d5f60e47f84043709fbe71edafb9a060/cf/4c56da3227bc4aa4a77107483f81f394
+23/02/28 12:16:28 WARN conf.Configuration: hadoop.native.lib is deprecated. Instead, use io.native.lib.available
+23/02/28 12:16:28 WARN conf.Configuration: fs.default.name is deprecated. Instead, use fs.defaultFS
+23/02/28 12:16:29 INFO hfile.CacheConfig: Allocating LruBlockCache with maximum size 124.2m
+K: row1/cf:col/1677603550111/Put/vlen=3 V: foo
+K: row2/cf:col/1677603662633/Put/vlen=3 V: bar
+Scanned kv count -> 2
+[training@localhost ~]$ hbase org.apache.hadoop.hbase.io.hfile.HFile --printkv --file hdfs://localhost:8020/hbase/mytable/d5f60e47f84043709fbe71edafb9a060/cf/1ebc6222378f473a88ab9791ffdaf3e1
+23/02/28 12:17:07 WARN conf.Configuration: hadoop.native.lib is deprecated. Instead, use io.native.lib.available
+23/02/28 12:17:08 WARN conf.Configuration: fs.default.name is deprecated. Instead, use fs.defaultFS
+23/02/28 12:17:08 INFO hfile.CacheConfig: Allocating LruBlockCache with maximum size 124.2m
+K: row3/cf:col/1677604012354/Put/vlen=4 V: doll
+Scanned kv count -> 1
+[training@localhost ~]$ hadoop fs -ls /hbase/mytable/*/cf
+Found 2 items
+-rw-r--r--   1 hbase supergroup        614 2023-02-28 12:07 /hbase/mytable/d5f60e47f84043709fbe71edafb9a060/cf/1ebc6222378f473a88ab9791ffdaf3e1
+-rw-r--r--   1 hbase supergroup        646 2023-02-28 12:03 /hbase/mytable/d5f60e47f84043709fbe71edafb9a060/cf/4c56da3227bc4aa4a77107483f81f394
+[training@localhost ~]$ hadoop fs -ls /hbase/mytable/*/cf
+Found 1 items
+-rw-r--r--   1 hbase supergroup        680 2023-02-28 12:26 /hbase/mytable/d5f60e47f84043709fbe71edafb9a060/cf/804cbbb0c5d04f319f44ebc5771c005f
+[training@localhost ~]$ hbase org.apache.hadoop.hbase.io.hfile.HFile --printkv --file hdfs://localhost:8020/hbase/mytable/d5f60e47f84043709fbe71edafb9a060/cf/804cbbb0c5d04f319f44ebc5771c005f
+23/02/28 12:26:52 WARN conf.Configuration: hadoop.native.lib is deprecated. Instead, use io.native.lib.available
+23/02/28 12:26:52 WARN conf.Configuration: fs.default.name is deprecated. Instead, use fs.defaultFS
+23/02/28 12:26:52 INFO hfile.CacheConfig: Allocating LruBlockCache with maximum size 124.2m
+K: row1/cf:col/1677603550111/Put/vlen=3 V: foo
+K: row2/cf:col/1677603662633/Put/vlen=3 V: bar
+K: row3/cf:col/1677604012354/Put/vlen=4 V: doll
+Scanned kv count -> 3
+[training@localhost ~]$ 
