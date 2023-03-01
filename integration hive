@@ -1,0 +1,81 @@
+[training@localhost ~]$ hive
+Logging initialized using configuration in file:/etc/hive/conf.dist/hive-log4j.properties
+Hive history file=/tmp/training/hive_job_log_training_202303011426_1479302687.txt
+hive> add jar
+    > /usr/lib/hive/lib/hive-hbase-handler-0.9.0-cdh4.1.1.jar;
+Added /usr/lib/hive/lib/hive-hbase-handler-0.9.0-cdh4.1.1.jar to class path
+Added resource: /usr/lib/hive/lib/hive-hbase-handler-0.9.0-cdh4.1.1.jar
+hive> add jar /usr/lib/hbase/hbase.jar;
+Added /usr/lib/hbase/hbase.jar to class path
+Added resource: /usr/lib/hbase/hbase.jar
+hive> 
+    > create external table hbaseUserRatings (userid int, movieid int, rating int)
+    > stored by 
+    > 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' with
+    > serdeproperties ("hbase.colums.mapping" = ":key,cf1:movieid,cf1:rating")
+    > tblproperties ("hbase.table.name" = "hbaseUserRatings");
+FAILED: Error in metadata: java.lang.RuntimeException: MetaException(message:org.apache.hadoop.hive.serde2.SerDeException Error: hbase.columns.mapping missing for this HBase table.)
+FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask
+hive> create external table hbaseUserRatings (userid int, movieid int, rating int)
+    > stored by                                                                   
+    > 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' with                     
+    > SERDEPROPERTIES ("hbase.colums.mapping" = ":key,cf1:movieid,cf1:rating")    
+    > TBLPOPERTIES ("hbase.table.name" = "hbaseUserRatings");                     
+FAILED: ParseException line 5:0 mismatched input 'TBLPOPERTIES' expecting EOF near ')'
+
+hive> CREATE EXTERNAL TABLE hbaseUserRatings (userid int,
+movieid int, rating int) STORED BY
+'org.apache.hadoop.hive.hbase.HBaseStorageHandler' WITH
+SERDEPROPERTIES ("hbase.columns.mapping" =
+":key,cf1:movieid,cf1:rating") TBLPROPERTIES
+("hbase.table.name" = "hbaseUserRatings");
+OK
+Time taken: 2.337 seconds
+hive> 
+    > SELECT * FROM hbaseUserRatings;
+OK
+10000	42	5
+11000	21	4
+Time taken: 0.338 seconds
+hive> 
+    > INSERT OVERWRITE TABLE hbaseUserRatings SELECT
+userid, (movieid+1), rating FROM hbaseUserRatings;
+Total MapReduce jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_202303011416_0001, Tracking URL = http://0.0.0.0:50030/jobdetails.jsp?jobid=job_202303011416_0001
+Kill Command = /usr/lib/hadoop/bin/hadoop job  -Dmapred.job.tracker=0.0.0.0:8021 -kill job_202303011416_0001
+Hadoop job information for Stage-0: number of mappers: 1; number of reducers: 0
+2023-03-01 14:50:48,562 Stage-0 map = 0%,  reduce = 0%
+2023-03-01 14:50:51,611 Stage-0 map = 100%,  reduce = 0%, Cumulative CPU 1.32 sec
+2023-03-01 14:50:52,637 Stage-0 map = 100%,  reduce = 100%, Cumulative CPU 1.32 sec
+MapReduce Total cumulative CPU time: 1 seconds 320 msec
+Ended Job = job_202303011416_0001
+2 Rows loaded to hbaseuserratings
+MapReduce Jobs Launched: 
+Job 0: Map: 1   Cumulative CPU: 1.32 sec   HDFS Read: 0 HDFS Write: 0 SUCCESS
+Total MapReduce CPU Time Spent: 1 seconds 320 msec
+OK
+Time taken: 8.416 seconds
+hive> 
+    > INSERT OVERWRITE TABLE hbaseUserRatings SELECT
+userid, movieid, rating FROM UserRatings;
+Total MapReduce jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_202303011416_0002, Tracking URL = http://0.0.0.0:50030/jobdetails.jsp?jobid=job_202303011416_0002
+Kill Command = /usr/lib/hadoop/bin/hadoop job  -Dmapred.job.tracker=0.0.0.0:8021 -kill job_202303011416_0002
+Hadoop job information for Stage-0: number of mappers: 1; number of reducers: 0
+2023-03-01 14:52:07,951 Stage-0 map = 0%,  reduce = 0%
+2023-03-01 14:52:35,068 Stage-0 map = 100%,  reduce = 0%, Cumulative CPU 2.68 sec
+2023-03-01 14:52:36,073 Stage-0 map = 100%,  reduce = 0%, Cumulative CPU 2.68 sec
+2023-03-01 14:52:37,098 Stage-0 map = 100%,  reduce = 100%, Cumulative CPU 2.68 sec
+MapReduce Total cumulative CPU time: 2 seconds 680 msec
+Ended Job = job_202303011416_0002
+100000 Rows loaded to hbaseuserratings
+MapReduce Jobs Launched: 
+Job 0: Map: 1   Cumulative CPU: 2.68 sec   HDFS Read: 0 HDFS Write: 0 SUCCESS
+Total MapReduce CPU Time Spent: 2 seconds 680 msec
+OK
+Time taken: 33.236 seconds
+hive> 
